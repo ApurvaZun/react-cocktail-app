@@ -1,14 +1,12 @@
-import React, { useState,useEffect } from 'react';
+import React, {lazy, Suspense, useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 
 import "../../styles/home.css";
-import Radio from "../Input/radio";
-import Search from "../Input/search";
-import ButtonRecipe from "../Input/button";
-import CardImage from "../Card/cardImage";
+import { ButtonRecipe, Radio, Search } from '../Input/index';
+const CardImage = lazy(() => import('../Card/cardImage'));
 
 const useStyles = makeStyles({
     root: {
@@ -29,7 +27,7 @@ function Home(){
     const [searchText, setSearchText] = useState("");
     const [typeOfSearch, setTypeOfSearch] = useState("Name");
     const [cocktail, setCocktail] = useState([]);
-    //*const [loading, setLoading] = useState(false);*//
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
 
@@ -40,11 +38,22 @@ function Home(){
             URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchText}`;
         }
 
-        fetch(URL)
-        .then(res => res.json()
-        .then(res => {
-            setCocktail(res.drinks);
-        }))
+        if(searchText !== ""){
+
+            setLoading(true);
+
+            fetch(URL)
+            .then(res => res.json()
+            .then(res => {
+                setLoading(false);
+                setCocktail(res.drinks);
+            }))
+            .catch(err => {
+                setLoading(false);
+                console.log(err);
+            })
+        }
+        
     }, [searchText, typeOfSearch]);
 
     function handleChange(event){
@@ -57,22 +66,26 @@ function Home(){
 
     return (
         <Container>
-            <Radio handleSelectChange={handleSelectChange} />
+            <Radio handleSelectChange={handleSelectChange} typeOfSearch={typeOfSearch}/>
             <Search searchText={searchText} handleChange={handleChange} />
 
-            <Grid container spacing={4} className={classes.grid}>
-                {cocktail.map(item => {
-                    return(
-                        <Grid key={item.idDrink} item xs={6} md={4} lg={3}>
-                            <Card className={classes.root}>
-                                <CardImage image={item.strDrinkThumb} id={item.idDrink} />
-                                <h5>{item.strDrink}</h5>
-                                <ButtonRecipe id={item.idDrink} />
-                            </Card>
-                        </Grid>
-                    );            
-                })}
-            </Grid>               
+            {loading ? 'Loading...' : 
+                <Grid container spacing={4} className={classes.grid}>
+                    {cocktail && cocktail.map(item => {
+                        return(
+                            <Grid key={item.idDrink} item xs={6} md={4} lg={3}>
+                                <Card className={classes.root}>
+                                    <Suspense fallback={<div>Loading Component</div>}>
+                                        <CardImage image={item.strDrinkThumb} id={item.idDrink} />
+                                    </Suspense>                                    
+                                    <h5>{item.strDrink}</h5>
+                                    <ButtonRecipe id={item.idDrink} />
+                                </Card>
+                            </Grid>
+                        );            
+                    })}
+                </Grid>
+            }                           
         </Container>
     )
 }

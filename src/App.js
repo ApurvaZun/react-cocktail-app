@@ -1,21 +1,17 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route} from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import './App.css';
-import Home from './components/Home/Home';
-import Recipe from "./components/cocktail/recipe";
+import "./App.css";
+import Home from "./components/Home/Home";
+import Recipe from "./components/recipe/recipe";
 import Header from "./components/Header/header";
 
 function App() {
-
   return (
     <Router>
       <div>
-          <Header />
-          <Switch>
+        <Header />
+        <Switch>
           <Route path="/cocktail/:id">
             <Recipe />
           </Route>
@@ -24,9 +20,7 @@ function App() {
           </Route>
         </Switch>
       </div>
-
     </Router>
-    
   );
 }
 

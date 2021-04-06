@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Radio( {handleChange, searchText} ){
+function Search( {handleChange, searchText} ){
     return (
         <div className="input-container">
             <input 
@@ -13,4 +13,4 @@ function Radio( {handleChange, searchText} ){
     )
 }
 
-export default Radio;
+export default Search;
