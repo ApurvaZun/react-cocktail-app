@@ -9,10 +9,15 @@ Cocktail-App
 ### Instructions
 
 ```bash
+
+install node if not installed already
+
 1. git clone git@github.com:ApurvaZun/react-cocktail-app.git
 
-2. npm install (this will install all dependency)
+2. cd react-cocktail-app
 
-3. npm start
+3. npm install (this will install all dependency)
+
+4. npm start
 
 ```
