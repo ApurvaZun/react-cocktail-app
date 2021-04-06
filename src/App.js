@@ -8,8 +8,9 @@ import Header from "./components/Header/header";
 
 function App() {
   return (
+    
     <Router>
-      <div>
+      <div className="App">
         <Header />
         <Switch>
           <Route path="/cocktail/:id">
